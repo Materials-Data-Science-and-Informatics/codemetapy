@@ -1,3 +1,4 @@
+from pathlib import Path
 import sys
 import json
 import os
@@ -180,6 +181,7 @@ def correct_wrong_uris(g: Graph, baseuri: Optional[str]):
 
             # these often get misinterpreted if they're not URIs, because rdflib prepends its baseuri
             cwd = os.getcwd()
+            cwd = Path(cwd).absolute().as_posix()
             prefixes = [
                 baseuri,
                 cwd + "/",

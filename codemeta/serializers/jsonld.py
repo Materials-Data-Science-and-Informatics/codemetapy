@@ -24,6 +24,8 @@ from codemeta.common import (
     DEVIANT_CONTEXT,
     ORDEREDLIST_PROPERTIES,
 )
+from pathlib import Path
+
 
 ORDEREDLIST_PROPERTIES_NAMES = list(os.path.basename(x) for x in ORDEREDLIST_PROPERTIES)
 NSPREFIXES = (
@@ -340,9 +342,9 @@ def rewrite_context(context, addcontext=None) -> list:
                         raise Exception(
                             f"Explicitly added context (--addcontext) must be a remote URL, got {remote_url} instead"
                         )
-                    local = "file://" + os.path.join(
+                    local = Path(
                         TMPDIR, os.path.basename(remote_url)
-                    )
+                    ).absolute().as_uri()
                     if value == local:
                         context[i] = remote_url
     elif isinstance(context, str):

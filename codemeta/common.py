@@ -13,6 +13,7 @@ from rdflib.namespace import RDF, RDFS, SKOS #type: ignore
 from typing import Union, Sequence, Optional,Generator
 from collections import OrderedDict
 from nameparser import HumanName
+from pathlib import Path
 
 
 PROGLANG_PYTHON = {
@@ -47,11 +48,11 @@ REPOSTATUS_SOURCE = "https://raw.githubusercontent.com/jantman/repostatus.org/ma
 
 TMPDIR  = os.environ.get("TMPDIR",gettempdir())
 
-SCHEMA_LOCAL_SOURCE = "file://" + os.path.join(TMPDIR, "schemaorgcontext.jsonld")
-CODEMETA_LOCAL_SOURCE = "file://" + os.path.join(TMPDIR, "codemeta.jsonld")
-STYPE_LOCAL_SOURCE = "file://" + os.path.join(TMPDIR, "stype.jsonld")
-IODATA_LOCAL_SOURCE = "file://" + os.path.join(TMPDIR, "iodata.jsonld")
-REPOSTATUS_LOCAL_SOURCE = "file://" + os.path.join(TMPDIR, "repostatus.jsonld")
+SCHEMA_LOCAL_SOURCE = Path(TMPDIR, "schemaorgcontext.jsonld").absolute().as_uri()
+CODEMETA_LOCAL_SOURCE = Path(TMPDIR, "codemeta.jsonld").absolute().as_uri()
+STYPE_LOCAL_SOURCE = Path(TMPDIR, "stype.jsonld").absolute().as_uri()
+IODATA_LOCAL_SOURCE = Path(TMPDIR, "iodata.jsonld").absolute().as_uri()
+REPOSTATUS_LOCAL_SOURCE =Pathn(TMPDIR, "repostatus.jsonld").absolute().as_uri()
 
 COMMON_SOURCEREPOS = ["https://github.com/","http://github.com","https://gitlab.com/","http://gitlab.com/","https://codeberg.org/","http://codeberg.org", "https://git.sr.ht/", "https://bitbucket.org/", "https://bitbucket.com/"]
 
@@ -291,11 +292,11 @@ def init_context(args: AttribDict):
         for remote_url in args.addcontext:
             if not remote_url.startswith("http"):
                 raise Exception(f"Explicitly added context (--addcontext) must be a remote URL, got {remote_url} instead")
-            local = "file://" + os.path.join(TMPDIR, os.path.basename(remote_url))
+            local = Path(TMPDIR, os.path.basename(remote_url)).absolute().as_uri()
             sources.append( (local, remote_url))
 
     for local, remote in sources:
-        localfile = local.replace("file://","")
+        localfile = Path(local).absolute().as_posix()
         if remote in ("http://schema.org", "https://schema.org","http://schema.org/", "https://schema.org/"):
             #schema.org does not do content negotation properly, instead it provides a link via a HEAD request, we don't support this but fake this step manually:
             remote = "https://schema.org/docs/jsonldcontext.json"
@@ -360,7 +361,7 @@ def init_graph(args: AttribDict):
     contextgraph.add((SDO.WebPage, RDFS.comment, Literal("A very particular page on the web")))
 
     for local, _ in context_sources:
-        with open(local.replace("file://",""),'rb') as f:
+        with open(Path(local).absolute().as_posix(),'rb') as f:
             contextgraph.parse(data=json.load(f), format="json-ld")
 
     if args.addcontextgraph:
