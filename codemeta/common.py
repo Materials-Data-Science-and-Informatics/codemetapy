@@ -52,7 +52,7 @@ SCHEMA_LOCAL_SOURCE = Path(TMPDIR, "schemaorgcontext.jsonld").absolute().as_uri(
 CODEMETA_LOCAL_SOURCE = Path(TMPDIR, "codemeta.jsonld").absolute().as_uri()
 STYPE_LOCAL_SOURCE = Path(TMPDIR, "stype.jsonld").absolute().as_uri()
 IODATA_LOCAL_SOURCE = Path(TMPDIR, "iodata.jsonld").absolute().as_uri()
-REPOSTATUS_LOCAL_SOURCE =Pathn(TMPDIR, "repostatus.jsonld").absolute().as_uri()
+REPOSTATUS_LOCAL_SOURCE =Path(TMPDIR, "repostatus.jsonld").absolute().as_uri()
 
 COMMON_SOURCEREPOS = ["https://github.com/","http://github.com","https://gitlab.com/","http://gitlab.com/","https://codeberg.org/","http://codeberg.org", "https://git.sr.ht/", "https://bitbucket.org/", "https://bitbucket.com/"]
 
